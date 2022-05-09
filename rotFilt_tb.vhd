@@ -35,6 +35,10 @@ architecture tb of rotFilt_tb is
 	signal s_out	: t_iq16;
 	signal s_debug : t_iq16;
 
+	--signal s_out	: t_iq(c_width*2-1 downto 0);
+	signal s_outR	: signed(c_width-1 downto 0);
+	signal s_outI	: signed(c_width-1 downto 0);
+	
 begin
 
 	LOAD: process
@@ -42,6 +46,8 @@ begin
 		variable v_comma : character;
 		variable v_intI : integer;
 		variable v_intQ	: integer;
+		variable v_iqInt : t_iq16;
+		variable v_iqMix : t_iq16;
 	begin
 
 		file_open(f_data, "C:\Users\Alexander Greer\Documents\mono\input_rotFilt.csv", read_mode);
