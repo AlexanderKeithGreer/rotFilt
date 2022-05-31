@@ -31,7 +31,7 @@ architecture arch of typeIQ_tb is
 	signal s_imag : integer;
 	signal s_cnjI : integer;
 	signal s_cnjQ : integer;
-	signal s_conj : t_iq (c_width-1 downto 0);
+	signal s_j 	  : t_iq (c_width-1 downto 0);
 	signal s_lshf : t_iq (c_width-1 downto 0);
 	signal s_rshf : t_iq (c_width-1 downto 0);
 	signal s_eq	  : boolean;
@@ -76,13 +76,13 @@ begin
 	s_sub <= -s_b;
 	s_conv <= to_iq(s_i, s_q, c_width);
 	s_j <= j(s_conv);
-	s_cnjI <= to_integer(realSN(s_conv));
-	s_cnjQ <= to_integer(imagSN(s_conv));
+	s_real <= to_integer(realSN(s_conv));
+	s_imag <= to_integer(imagSN(s_conv));
 	s_lshf <= s_a < 1;
 	s_rshf <= s_a > 1;
 	
-	s_real <= to_integer(realSN(s_j));
-	s_imag <= to_integer(imagSN(s_j));
+	s_cnjI <= to_integer(realSN(s_j));
+	s_cnjQ <= to_integer(imagSN(s_j));
 	s_eq <= (s_a = s_b);
 	s_neq <= (s_a /= s_b);
 	
