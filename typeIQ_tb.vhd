@@ -36,6 +36,7 @@ architecture arch of typeIQ_tb is
 	signal s_rshf : t_iq (c_width-1 downto 0);
 	signal s_eq	  : boolean;
 	signal s_neq  : boolean;
+	signal s_sgn  : t_iq (4-1 downto 0);
 
 	type t_stimulus is record
 		s_A : t_iq (c_width-1 downto 0);
@@ -76,6 +77,7 @@ begin
 	s_sub <= -s_b;
 	s_conv <= to_iq(s_i, s_q, c_width);
 	s_j <= j(s_conv);
+	s_sgn <= sgn(s_conv);
 	s_real <= to_integer(realSN(s_conv));
 	s_imag <= to_integer(imagSN(s_conv));
 	s_lshf <= s_a < 1;

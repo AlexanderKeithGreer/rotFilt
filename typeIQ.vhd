@@ -37,6 +37,7 @@ package typeIQ is
 	function imagIQ (ARG : t_iq) return t_iq;
 	function negSection (ARG : t_iq) return t_iq;
 	function slice (ARG : t_iq ; A, B : integer) return t_iq;
+	function sgn (ARG : t_iq) return t_iq;
 
 end package;
 
@@ -255,6 +256,28 @@ package body  typeIQ is
 		return O;
 	end conj;
 
+	
+	function sgn (
+		ARG : t_iq)
+	return t_iq is
+		variable I : integer:=ARG'length;
+		variable Q : integer:=ARG'length/2;
+		variable O : t_iq (3 downto 0) := (others=>'0');
+	begin
+		if (signed(ARG(I-1 downto Q)) > to_signed(0, I-Q)) then
+			O(4-1 downto 2) := b"01";
+		elsif (signed(ARG(I-1 downto Q)) < to_signed(0, I-Q)) then
+			O(4-1 downto 2) := b"11";
+		end if;
+		
+		if (signed(ARG(Q-1 downto 0)) > to_signed(0, I-Q)) then
+			O(2-1 downto 0) := b"01";
+		elsif (signed(ARG(Q-1 downto 0)) < to_signed(0, Q-0)) then
+			O(2-1 downto 0) := b"11";
+		end if;
+		
+		return O;
+	end sgn;
 	
 -- ----------------------------------------------
 -- Helpers

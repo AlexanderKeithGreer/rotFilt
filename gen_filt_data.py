@@ -45,7 +45,7 @@ def writeToCSV(bits, ratio, mixed, interf, file=""):
     mix_i = mix_i*(dyn_range/dyn_max)/ratio
     mix_q = mix_q*(dyn_range/dyn_max)/ratio
 
-    output = np.zeros([l_data, 4], dtype=np.int64)
+    output = np.zeros([l_data, 6], dtype=np.int64)
     output[:,0] = np.int64(np.round(int_i[:]))
     output[:,1] = np.int64(np.round(int_q[:]))
     output[:,2] = np.int64(np.round(mix_i[:]))
@@ -73,9 +73,9 @@ def main():
     ratio = 8
 
     time = np.arange(0, n_samp/f_s, 1/f_s, dtype=np.complex128);
-    desired = genDataLP(n_samp, f_s)
-    interf = np.exp(2j*np.pi*f_interf*time)
-    mixed = desired + interf
+    desired = np.exp(2j*np.pi*f_interf*time)
+    interf = genDataLP(n_samp, f_s)
+    mixed = 0.2*desired + interf
 
     writeToCSV(bits, ratio, mixed, interf, file="input_rotFilt.csv")
 

@@ -23,8 +23,8 @@ end rotFilt;
 
 architecture arch of rotFilt is
 	--Constants
-	constant c_mu : integer:=8;	
-	constant c_shift : integer:= 8; --Should never change!
+	constant c_mu : integer:=7;	
+	constant c_shift : integer:= g_width/2-10; --Should never change!
 	--Signals
 	signal s_err : t_iq (g_width-1 downto 0); 
 	signal s_tap : t_iq (g_width-1 downto 0); 
@@ -48,19 +48,18 @@ begin
 	SOLE: process (i_clk, i_rst)
 	begin
 		if (i_rst = '1') then
-			s_tap <= (others =>'0');
+			s_tap <= to_iq(0,0,g_width);
 			s_conv <= (others =>'0');
 			s_schur <= (others =>'0');
 			s_schurDiv <= (others =>'0');
 			s_err <= (others =>'0');
 		elsif (rising_edge(i_clk)) then
 			--This is getting pipelined out of sheer necessity.
-			--s_conv <= multIQ16(s_interf, s_tap, c_shift);
-			--s_err <=  subIQ16(s_mixed, s_conv);
-			--s_schur <= multIQ16(s_interf, s_err, c_shift);
-			--s_schurDiv <= divIQ16(s_schur, c_mu);
-			--s_tap <= addIQ16(s_err, s_schurDiv);
-			s_tap <= x"00FF00FF";
+			s_conv <= slice(s_interf * conj(s_tap), 
+								 g_width-c_shift-1, g_width/2-c_shift);
+			s_err <=  s_mixed - s_conv;
+			s_schur <= slice(s_interf * conj(s_err), g_width-1-c_shift, g_width/2-c_shift);
+			s_tap <= s_tap + (s_schur > c_mu);
 		end if;
 	end process SOLE;
 end arch;
